@@ -21,7 +21,7 @@ const sql = 'SELECT * FROM posts';
 
 
 connection.query(sql, (err, results) => {
-    
+
 if(err) return res.status(500).json({
     error: "Database query error"
 })
@@ -32,11 +32,31 @@ res.json(results)
 };
 
 function show(req, res) {
-    const id = parseInt(req.params.id)
+   /* const id = parseInt(req.params.id)
     // cerchiamo il post tramite id
     const post = arrPosts.find(post => post.id === id);
     // Restituiamolo sotto forma di JSON
-    res.json(post);
+    res.json(post);*/
+
+    //DB MYSQL
+
+    const {id} = req.params;
+
+    const sql = 'SELECT * FROM posts WHERE id = ?'
+
+    connection.query(sql, [id], (err, results) => {
+
+        if(err) return res.status(500).json({
+            error: "Database query error"
+        })
+        if( results.length === 0 ) return res.status(404).json({
+            status:404,
+            error: "Not found",
+            message: "Post non trovato"
+        })
+        
+        res.json(results[0])
+        }) 
 };
 
 
@@ -114,7 +134,8 @@ function update(req, res) {
 
 
 function destroy(req, res) {
-    const id = parseInt(req.params.id)
+
+   /* const id = parseInt(req.params.id)
     // cerchiamo il pizza tramite id
     const post = arrPosts.find(post => post.id === id);
     // Piccolo controllo
@@ -130,7 +151,21 @@ function destroy(req, res) {
     // Verifichiamo sul terminale
     console.log(arrPosts);
     // Restituiamo lo status corretto
-    res.sendStatus(204)
+    res.sendStatus(204)*/
+
+    // CON DB MYSQL
+    const {id} = req.params;
+
+    const sql = 'DELETE FROM posts WHERE id = ?'
+    connection.query(sql, [id], (err) => {
+
+        if(err) return res.status(500).json({
+            error: "Database query error"
+        })
+        
+        res.sendStatus(204)
+        }) 
+        
     };
 
 // esportiamo tutto
