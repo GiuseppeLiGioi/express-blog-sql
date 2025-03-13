@@ -65,7 +65,7 @@ function show(req, res) {
 
 
 function store(req, res) {
-    //creiamo un nuovo id incrementando l'ultimo id presente
+   /* //creiamo un nuovo id incrementando l'ultimo id presente
     const newId = arrPosts[arrPosts.length - 1].id + 1;
 
     //creiamo il nuovo oggetto post
@@ -86,7 +86,32 @@ function store(req, res) {
 
     //restituiamo lo status corretto ed il post appena creato.
     res.status(201);
-    res.json(newPost);
+    res.json(newPost); */
+
+
+    //QUERY DB MYSQL
+
+    const {name, image} = req.body;
+
+    const sql = 'INSERT INTO posts (name, image) VALUES (?,?)'
+
+
+    
+    connection.query(sql, [name, image], (err, results) => {
+
+        if(err) return res.status(500).json({
+            error: "Database query error"
+        })
+        
+        
+        res.status(201);
+        console.log(results)
+        /*res.json({
+            id: results.InsertId
+        })*/
+        }) 
+
+
 
     }
 
