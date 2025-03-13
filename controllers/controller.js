@@ -1,17 +1,34 @@
 const arrPosts = require('../data/data'); 
+const connection = require('../data/db.js')
 
 
 function index(req, res) {
-    let filteredPosts = arrPosts;
+//let filteredPosts = arrPosts;
 // Se la richiesta contiene un filtro, allora filtriamo i posts
-if (req.query.title) {
+/*if (req.query.title) {
 filteredPosts = arrPosts.filter(
 post => post.title.includes(req.query.title)
 );
-}
+}*/
 // restituiamo la variabile filteredPosts
 // potrebbe essere stata filtrata o contenere il menu-post originale
-res.json(filteredPosts);
+//res.json(filteredPosts);
+
+
+
+//VERSIONE DB MYSQL
+const sql = 'SELECT * FROM posts';
+
+
+connection.query(sql, (err, results) => {
+    
+if(err) return res.status(500).json({
+    error: "Database query error"
+})
+
+res.json(results)
+}) 
+
 };
 
 function show(req, res) {
